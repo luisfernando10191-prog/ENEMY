@@ -1,0 +1,6 @@
+N E R 
+LUZ
+POSTE
+ALO
+TESTE
+M A C A CO
