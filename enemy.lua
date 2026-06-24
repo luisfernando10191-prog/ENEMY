@@ -4,7 +4,6 @@ enemyList = {}
 local characterName = g_game.getCharacterName()
 local worldName = g_game.getWorldName()
 
--- Estrutura de salvamento ajustada para múltiplos perfis
 storage.enemyConfig = storage.enemyConfig or {}
 storage.enemyConfig[worldName] = storage.enemyConfig[worldName] or {}
 storage.enemyConfig[worldName][characterName] = storage.enemyConfig[worldName][characterName] or {}
@@ -16,14 +15,12 @@ end
 config.maxDistance = config.maxDistance or 6
 config.currentProfile = config.currentProfile or "Perfil 1"
 
--- Inicializa a tabela de perfis se não existir
 config.profiles = config.profiles or {
     ["Perfil 1"] = { url = "", enemies = {} },
     ["Perfil 2"] = { url = "", enemies = {} },
     ["Perfil 3"] = { url = "", enemies = {} }
 }
 
--- Atalho para o perfil ativo no momento
 local function getActiveProfile()
     return config.profiles[config.currentProfile]
 end
@@ -244,7 +241,6 @@ enemyCaster.window:hide()
 local mainPanel = enemyCaster.window.mainPanel
 local enemyTextList = mainPanel.enemyTextList
 
--- Configuração do ComboBox (Menu de Perfis)
 mainPanel.configList:addOption("Perfil 1")
 mainPanel.configList:addOption("Perfil 2")
 mainPanel.configList:addOption("Perfil 3")
@@ -253,7 +249,6 @@ mainPanel.configList:setCurrentOption(config.currentProfile)
 mainPanel.distInput:setText(tostring(config.maxDistance))
 mainPanel.urlPanel.urlInput:setText(getActiveProfile().url)
 
--- FUNÇÃO PARA REFRESH DA LISTA NA TELA
 function enemyCaster.refreshList()
     local focusedChild = enemyTextList:getFocusedChild()
     local focusedNick = focusedChild and focusedChild.nickName or nil
@@ -328,12 +323,10 @@ UIWidget
     end
 end
 
--- MUDANÇA DE PERFIL NO MENU
 mainPanel.configList.onOptionChange = function(widget, option)
     config.currentProfile = option
     local profile = getActiveProfile()
     
-    -- Atualiza o campo de texto da URL com o link salvo deste perfil
     mainPanel.urlPanel.urlInput:setText(profile.url)
     
     updateEnemyList()
@@ -470,7 +463,6 @@ end
 updateEnemyList()
 enemyCaster.refreshList()
 
--- Carrega o perfil atual automaticamente ao iniciar o script de forma segura
 local profile = getActiveProfile()
 if profile.url and profile.url:len() > 10 then
     local delaySync = macro(2000, function(macroDelay)
@@ -479,7 +471,6 @@ if profile.url and profile.url:len() > 10 then
     end)
 end
 
--- MACRO DE TARGETING
 macro(100, function()
     if not config.macroActive then return end
     if isInPz() then return end
